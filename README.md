@@ -89,3 +89,4 @@ mvn clean package
 ```
 java -cp target/alstrudat-c??-ifs24046-1.0-SNAPSHOT.jar del.alstrudat.App < testcases/input1.txt
 ```
+tes
