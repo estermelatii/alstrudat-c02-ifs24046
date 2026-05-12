@@ -9,7 +9,7 @@ public class Program {
     private int[] ids;
     private String[] names;
     private int[] stocks;
-    private int[] status; // 0=EMPTY, 1=ACTIVE, 2=DELETED
+    private int[] status;
 
     public Program() {
         ids = new int[SIZE];
@@ -27,37 +27,38 @@ public class Program {
     }
 
     private int probe(int key, int i) {
-        return (h1(key) + i * h2(key)) % 13;
+        return (h1(key) + i * h2(key)) % SIZE;
     }
 
     public void insert(int id, String nama, int stok) {
-        int insertIdx = -1; // slot kandidat terbaik (DELETED pertama atau EMPTY)
+        int insertIdx = -1;  // kandidat slot terbaik (DELETED atau EMPTY)
 
         for (int i = 0; i < SIZE; i++) {
             int idx = probe(id, i);
 
+            // Jika data sudah ada → UPDATE
             if (status[idx] == ACTIVE && ids[idx] == id) {
-                // ID sudah ada dan aktif — UPDATE stok saja
                 int oldStok = stocks[idx];
                 stocks[idx] = stok;
                 System.out.println("UPDATE " + id + " " + oldStok + " -> " + stok);
                 return;
             }
 
-            if (status[idx] == EMPTY) {
-                // Slot kosong — pakai ini jika belum ada kandidat DELETED
-                if (insertIdx == -1) insertIdx = idx;
-                break; // EMPTY menghentikan pencarian
-            }
-
-            // Slot tidak bisa langsung dipakai (ACTIVE beda ID atau DELETED) -> COLLISION
-            System.out.println("COLLISION at " + idx);
-
+            // Catat slot DELETED pertama
             if (status[idx] == DELETED && insertIdx == -1) {
-                // Catat slot DELETED pertama sebagai kandidat insert
                 insertIdx = idx;
             }
-            // Jika ACTIVE beda ID: lanjut probe saja
+
+            // Jika ketemu EMPTY
+            if (status[idx] == EMPTY) {
+                if (insertIdx == -1) insertIdx = idx;
+                break;
+            }
+
+            // Collision hanya jika slot ACTIVE dengan ID berbeda
+            if (status[idx] == ACTIVE) {
+                System.out.println("COLLISION at " + idx);
+            }
         }
 
         if (insertIdx == -1) {
@@ -65,6 +66,7 @@ public class Program {
             return;
         }
 
+        // Insert ke slot terbaik
         status[insertIdx] = ACTIVE;
         ids[insertIdx] = id;
         names[insertIdx] = nama;
