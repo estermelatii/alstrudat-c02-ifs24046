@@ -10,13 +10,12 @@ public class Program {
     private String[] names;
     private int[] stocks;
     private int[] status;
-    
 
     public Program() {
         ids = new int[SIZE];
         names = new String[SIZE];
         stocks = new int[SIZE];
-        status = new int[SIZE]; // default 0 = EMPTY
+        status = new int[SIZE];
     }
 
     private int h1(int key) {
@@ -32,12 +31,11 @@ public class Program {
     }
 
     public void insert(int id, String nama, int stok) {
-        int insertIdx = -1;  // kandidat slot terbaik (DELETED atau EMPTY)
+        int insertIdx = -1;
 
         for (int i = 0; i < SIZE; i++) {
             int idx = probe(id, i);
 
-            // Jika data sudah ada → UPDATE
             if (status[idx] == ACTIVE && ids[idx] == id) {
                 int oldStok = stocks[idx];
                 stocks[idx] = stok;
@@ -45,20 +43,16 @@ public class Program {
                 return;
             }
 
-            // Catat slot DELETED pertama
-            if (status[idx] == DELETED && insertIdx == -1) {
-                insertIdx = idx;
-            }
-
-            // Jika ketemu EMPTY
             if (status[idx] == EMPTY) {
                 if (insertIdx == -1) insertIdx = idx;
                 break;
             }
 
-            // Collision hanya jika slot ACTIVE dengan ID berbeda
-            if (status[idx] == ACTIVE) {
-                System.out.println("COLLISION at " + idx);
+            // Cetak COLLISION untuk semua slot yang tidak bisa dipakai (ACTIVE beda ID atau DELETED)
+            System.out.println("COLLISION at " + idx);
+
+            if (status[idx] == DELETED && insertIdx == -1) {
+                insertIdx = idx;
             }
         }
 
@@ -67,7 +61,6 @@ public class Program {
             return;
         }
 
-        // Insert ke slot terbaik
         status[insertIdx] = ACTIVE;
         ids[insertIdx] = id;
         names[insertIdx] = nama;
