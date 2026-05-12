@@ -1,0 +1,7 @@
+INSERT 1 -> 1
+COLLISION at 1
+INSERT 14 -> 8
+UPDATE 1 100 -> 200
+UPDATE 14 50 -> 80
+FOUND 1 Pulpen 200 at 1
+FOUND 14 Penghapus 80 at 8
