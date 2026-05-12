@@ -10,6 +10,7 @@ public class Program {
     private String[] names;
     private int[] stocks;
     private int[] status;
+    
 
     public Program() {
         ids = new int[SIZE];
