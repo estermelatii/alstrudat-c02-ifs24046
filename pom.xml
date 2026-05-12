@@ -4,10 +4,10 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <groupId>del.alstrudat</groupId>
-    <artifactId>alstrudat-c??-ifs24046</artifactId>
+    <artifactId>alstrudat-c02-ifs24046</artifactId>
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>alstrudat-c??-ifs24046</name>
+    <name>alstrudat-c02-ifs24046</name>
     <url>http://maven.apache.org</url>
     <dependencies>
         <dependency>
