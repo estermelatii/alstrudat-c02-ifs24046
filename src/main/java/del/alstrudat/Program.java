@@ -31,13 +31,13 @@ public class Program {
     }
 
     public void insert(int id, String nama, int stok) {
-        int insertIdx = -1; // slot terbaik (DELETED pertama atau EMPTY)
+        int insertIdx = -1; // slot kandidat terbaik (DELETED pertama atau EMPTY)
 
         for (int i = 0; i < SIZE; i++) {
             int idx = probe(id, i);
 
             if (status[idx] == ACTIVE && ids[idx] == id) {
-                // ID sudah ada — UPDATE stok
+                // ID sudah ada dan aktif — UPDATE stok saja
                 int oldStok = stocks[idx];
                 stocks[idx] = stok;
                 System.out.println("UPDATE " + id + " " + oldStok + " -> " + stok);
@@ -45,17 +45,19 @@ public class Program {
             }
 
             if (status[idx] == EMPTY) {
+                // Slot kosong — pakai ini jika belum ada kandidat DELETED
                 if (insertIdx == -1) insertIdx = idx;
-                break;
+                break; // EMPTY menghentikan pencarian
             }
 
-            if (status[idx] == DELETED) {
-                System.out.println("COLLISION at " + idx);
-                if (insertIdx == -1) insertIdx = idx;
-            } else {
-                // ACTIVE, beda ID
-                if (i > 0) System.out.println("COLLISION at " + idx);
+            // Slot tidak bisa langsung dipakai (ACTIVE beda ID atau DELETED) -> COLLISION
+            System.out.println("COLLISION at " + idx);
+
+            if (status[idx] == DELETED && insertIdx == -1) {
+                // Catat slot DELETED pertama sebagai kandidat insert
+                insertIdx = idx;
             }
+            // Jika ACTIVE beda ID: lanjut probe saja
         }
 
         if (insertIdx == -1) {
